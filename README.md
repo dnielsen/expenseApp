@@ -1,8 +1,6 @@
 
 
-#WORK IN PROGRESS
-
-simple Expense App with photo and Concur submit
+##simple Expense App with photo and Concur submit
 
 
 

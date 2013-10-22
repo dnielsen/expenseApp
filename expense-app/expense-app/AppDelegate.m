@@ -1,30 +1,24 @@
 //
 //  AppDelegate.m
-//  expense-app
+//  My ExpenceApp
 //
-//  Created by Matt Schmulen on 9/27/13.
-//  Copyright (c) 2013 Matt Schmulen. All rights reserved.
+//  Created by Dimple on 08/10/13.
+//  Copyright (c) 2013 user. All rights reserved.
 //
-#import <Crashlytics/Crashlytics.h>
+
 #import "AppDelegate.h"
- #import "AFNetworkActivityIndicatorManager.h"
+
 
 @implementation AppDelegate
 
+@synthesize accessToken,username,password;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
-    [NSURLCache setSharedURLCache:URLCache];
-    
-    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-    
-    [Crashlytics startWithAPIKey:@"bcc6ec11a2934eaf4cf2218cf4928e52b6f7be66"];
-    
+    // Override point for customization after application launch.
     return YES;
 }
-
+							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -33,7 +27,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
@@ -51,39 +45,6 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
-
-
-
-
-
-
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    //[responseData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    //[responseData appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    // Show error
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    // Once this method is invoked, "responseData" contains the complete result
-}
-
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 + (void) faceDetectFromPicture: (NSString*) photoURL
 {
@@ -119,6 +80,9 @@ static NSString* _HPTOKEN = nil;
 + (void) initializeServerData
 {
 }
+
+
+
 
 
 @end

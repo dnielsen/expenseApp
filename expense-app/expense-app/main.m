@@ -1,9 +1,9 @@
 //
 //  main.m
-//  expense-app
+//  My ExpenceApp
 //
-//  Created by Matt Schmulen on 9/27/13.
-//  Copyright (c) 2013 Matt Schmulen. All rights reserved.
+//  Created by Dimple on 08/10/13.
+//  Copyright (c) 2013 user. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

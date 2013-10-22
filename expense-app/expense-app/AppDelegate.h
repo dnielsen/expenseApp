@@ -1,34 +1,24 @@
 //
 //  AppDelegate.h
-//  expense-app
+//  My ExpenceApp
 //
-//  Created by Matt Schmulen on 9/27/13.
-//  Copyright (c) 2013 Matt Schmulen. All rights reserved.
+//  Created by Dimple on 08/10/13.
+//  Copyright (c) 2013 user. All rights reserved.
 //
 
-#import <Availability.h>
 #import <UIKit/UIKit.h>
+#import "RXMLElement.h"
+#import "Base64.h"
 #import "utility.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) NSString *accessToken;
+@property (strong, nonatomic) NSString *username;
+@property (strong, nonatomic) NSString *password;
 
-//+ (LBRESTAdapter *) adapter;
-//+ (LBModel *) currentUser;
-
-//+ (void) submitExpenseToConcur;
-//+ (void) facePrintFromImage;
-
-+ (void) initializeServerData;
-
-+ (void) updateHPToken;
-+ (void) forceHPTokenRefresh;
-+ (void) identifyFacesFromPicture: (NSString*) photoURL;
-+ (void) faceDetectFromPicture: (NSString*) photoURL;
-//+ (void) forceHPTokenRefresh;
-
-//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//- (void)authenticateUser:(NSString *)uname1 : (NSString *)pass1;
 
 
 @end

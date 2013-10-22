@@ -7,7 +7,7 @@
 //
 
 #import "ModelUser.h"
-#import "AFHTTPRequestOperation.h"
+//#import "AFHTTPRequestOperation.h"
 
 NSString * const kUserProfileImageDidLoadNotification = @"com.alamofire.user.profile-image.loaded";
 
@@ -15,7 +15,7 @@ NSString * const kUserProfileImageDidLoadNotification = @"com.alamofire.user.pro
 @property (readwrite, nonatomic, assign) NSUInteger userID;
 @property (readwrite, nonatomic, copy) NSString *username;
 @property (readwrite, nonatomic, copy) NSString *avatarImageURLString;
-@property (readwrite, nonatomic, strong) AFHTTPRequestOperation *avatarImageRequestOperation;
+//@property (readwrite, nonatomic, strong) AFHTTPRequestOperation *avatarImageRequestOperation;
 
 #ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
 + (NSOperationQueue *)sharedProfileImageRequestOperationQueue;

@@ -15,7 +15,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
-#import "AFHTTPRequestOperationManager.h"
+//#import "AFHTTPRequestOperationManager.h"
 
 @interface HomeViewController ()
 
@@ -52,13 +52,53 @@ UIPopoverController *popover;
     
     NSLog(@"actionSubmitImageToHP");
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters = @{@"foo": @"bar"};
-    [manager POST:@"http://example.com/resources.json" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    
+//    NSDictionary *dict1 = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"dnielsen",@"Deepblue1", nil] forKeys:[NSArray arrayWithObjects:@"username",@"password", nil]];
+//    NSDictionary *dict2 = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:dict1,@"10873218563681",nil] forKeys:[NSArray arrayWithObjects:@"passwordCredentials",@"tenantId",nil]];
+//    NSDictionary *dict3 = [NSDictionary dictionaryWithObject:dict2 forKey:@"auth"];
+//    NSLog(@"Dimple:%@",dict3);
+    
+    
+    NSDictionary *dict1 = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"YS11LX9TT81LNVXKSKM7",@"r8zsRj+i/SfVSXkOiUlVZg2SJBw2p2izogqKlo+W", nil] forKeys:[NSArray arrayWithObjects:@"accessKey",@"secretKey", nil]];
+    
+    NSDictionary *dict2 = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:dict1,[NSArray arrayWithObject:@"accessKey"], nil] forKeys:[NSArray arrayWithObjects:@"accessKey",@"methods", nil]];
+    
+    NSDictionary *dict3 = [NSDictionary dictionaryWithObject:dict2 forKey:@"identity"];
+    
+    NSDictionary *dict4 = [NSDictionary dictionaryWithObject:dict3 forKey:@"auth"];
+    NSLog(@"Dimple:%@",dict4);
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict4 options:NSJSONWritingPrettyPrinted error:nil];
+
+    NSString *requestString = [NSString stringWithFormat:@""];
+    
+    NSMutableData *requestData = [NSMutableData dataWithBytes: [requestString UTF8String] length: [requestString length]];
+    [requestData appendData:jsonData];
+    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/tokens-d"]];
+
+    [request setHTTPMethod: @"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:requestData];
+
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse: nil error: nil ];
+    NSString *str = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    //JSONObjectWithData:(NSData *)data options:(NSJSONReadingOptions)opt error:(NSError **)error
+    NSArray *DataArr = [NSJSONSerialization JSONObjectWithData:returnData options:NSJSONReadingMutableContainers error:nil];
+//    [DataArr retain];
+    NSLog(@"\n\nDimple::::::%@",DataArr);
+    
+    
+
+//    [manager POST:@"https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/tokens" parameters:dict3 success:^(AFHTTPRequestOperation *operation, id responseObject)
+//    {
+//        NSLog(@"JSON: %@", responseObject);
+//    }
+//          failure:^(AFHTTPRequestOperation *operation, NSError *error)
+//    {
+//        NSLog(@"Error: %@", error);
+//    }];
     
 }
 
@@ -196,8 +236,8 @@ UIPopoverController *popover;
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
-    [AppDelegate initializeServerData];
-    [AppDelegate updateHPToken];
+//    [AppDelegate initializeServerData];
+//    [AppDelegate updateHPToken];
     
 }
 

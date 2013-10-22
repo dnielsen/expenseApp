@@ -9,7 +9,7 @@
 #import "ExpenseModel.h"
 #import "ModelUser.h"
 
-#import "AFAppDotNetAPIClient.h"
+//#import "AFAppDotNetAPIClient.h"
 
 @implementation ExpenseModel
 
@@ -19,17 +19,19 @@
         return nil;
     }
     
-    self.postID = [[attributes valueForKeyPath:@"id"] integerValue];
-    self.text = [attributes valueForKeyPath:@"text"];
+    self.ApprovalStatus = [attributes valueForKeyPath:@"ApprovalStatus"];
+    self.EmployeeName = [attributes valueForKeyPath:@"EmployeeName"];
     
-    self.name = [attributes valueForKeyPath:@"name"];
-    self.submittingEmployeeEmail = [attributes valueForKeyPath:@"submittingEmployeeEmail"];
-    self.submittingEmployeePhotoURL = [attributes valueForKeyPath:@"submittingEmployeePhotoURL"];
-    self.time = [attributes valueForKeyPath:@"time"];
-    self.status = [attributes valueForKeyPath:@"status"];
-    self.location = [attributes valueForKeyPath:@"location"];
-    self.amount = [attributes valueForKeyPath:@"amount"];
-    
+    self.ExpenseUserLoginID = [attributes valueForKeyPath:@"ExpenseUserLoginID"];
+    self.LastComment = [attributes valueForKeyPath:@"LastComment"];
+    self.PaymentStatus = [attributes valueForKeyPath:@"PaymentStatus"];
+    self.ReportCurrency = [attributes valueForKeyPath:@"ReportCurrency"];
+    self.ReportDate = [attributes valueForKeyPath:@"ReportDate"];
+    self.ReportDetailsURL = [attributes valueForKeyPath:@"ReportDetailsURL"];
+    self.ReportId = [attributes valueForKeyPath:@"ReportId"];
+    self.ReportName = [attributes valueForKeyPath:@"ReportName"];
+    self.ReportTotal = [[attributes valueForKeyPath:@"ReportTotal"] doubleValue];
+//    self.ExpenseType = [attributes valueForKeyPath:@"ReportName"];
     //self.user = [[User alloc] initWithAttributes:[attributes valueForKeyPath:@"user"]];
     
     
@@ -37,7 +39,7 @@
 }
 
 #pragma mark -
-
+/*
 + (NSURLSessionDataTask *)globalTimelinePostsWithBlock:(void (^)(NSArray *posts, NSError *error))block {
     return [[AFAppDotNetAPIClient sharedClient] GET:@"expense" parameters:nil success:^(NSURLSessionDataTask * __unused task, id JSON) {
         NSArray *postsFromResponse = [JSON valueForKeyPath:@"data"];
@@ -56,4 +58,5 @@
         }
     }];
 }
+ */
 @end

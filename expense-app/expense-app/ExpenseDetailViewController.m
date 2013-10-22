@@ -6,12 +6,15 @@
 //  Copyright (c) 2013 Matt Schmulen. All rights reserved.
 //
 
-#import "ExpenseDetailViewController.h"
 
+#import "ExpenseDetailViewController.h"
 #import "utility.h"
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MobileCoreServices/MobileCoreServices.h>
+
+//#define ALERTLOGIN                  101
+//#define ALERTNOUSERPASS             102
 
 @interface ExpenseDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *imageViewAttendee;
@@ -33,7 +36,7 @@
 UISwitch *editSwitch;
 UIPopoverController *popover;
 
-@synthesize imagePicker, usedCamera, model;
+@synthesize imagePicker, usedCamera, model,txtExpType,picker,Flag;
 
 - (IBAction)actionPhotoPick:(id)sender {
     
@@ -70,29 +73,50 @@ UIPopoverController *popover;
     
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+
+#pragma mark - XML Response delegate method
+-(void)xmlResponse:(RXMLElement *)theRoot
+{
+//    [General removeWaitView];
+//    RXMLElement *loginId = [theRoot child:@"LoginId"];
     
-    [self saveAndClose];
-    
-    
-    if (buttonIndex == 0){
-        //cancel clicked ...do your action
-    }else{
-        
-    }
+//    [Settings sharedInstance].loginId = [loginId text];
+//    [_delegate didLogin];
+}
+
+#pragma mark - Add Remove waitView
+
+- (void)addWaitView
+{
+    controller = [self.storyboard instantiateViewControllerWithIdentifier:@"waitView"];
+    [self.view addSubview:controller.view];
+}
+
+- (void)removeWaitView
+{
+    [controller.view removeFromSuperview];
 }
 
 
-- (IBAction)actionSubmitToConcur:(id)sender {
+#pragma mark-
+
+
+
+- (IBAction)actionSubmitToConcur:(id)sender
+{
     
-    NSLog(@"actionSubmitToConcur");
+    [self addWaitView];
+    [self performSelector:@selector(saveAndClose) withObject:nil afterDelay:0.0];
+
+
+//    [self saveAndClose];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Submit to Concur"
-                                                    message:@"Expense report has been submitted to Concur"
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Submit to Concur"
+//                                                    message:@"Expense report has been submitted to Concur"
+//                                                   delegate:self
+//                                          cancelButtonTitle:@"OK"
+//                                          otherButtonTitles:nil];
+//    [alert show];
 }
 
 - (IBAction)actionUpdate:(id)sender {
@@ -102,7 +126,7 @@ UIPopoverController *popover;
     
     if ( false )
     {
-        [ AppDelegate identifyFacesFromPicture:@""];
+//        [AppDelegate identifyFacesFromPicture:@""];
     }
     else
     {
@@ -156,21 +180,8 @@ UIPopoverController *popover;
 
 - (IBAction)actionSave:(id)sender {
     
-    [self saveAndClose];
+//    [self saveAndClose];
     
-}
-
-- (void) saveAndClose {
-    
-    NSLog(@"actionSave");
-    
-    model.name = self.textFieldName.text;
-    
-    NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
-    [f setNumberStyle:NSNumberFormatterDecimalStyle];
-    model.amount = [f numberFromString:self.textFieldAmount.text];
-    model.location = self.labelCurrentLocation.text;
-    model.time = self.labelCurrentTime.text;
     
     //Close the screen
     if([self.presentingViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)])
@@ -182,14 +193,340 @@ UIPopoverController *popover;
     
 }
 
+- (void) saveAndClose {
+    
+    
+    model.ReportName = self.textFieldName.text;
+    
+//    NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+//    [f setNumberStyle:NSNumberFormatterDecimalStyle];
+//    model.ReportTotal = [f numberFromString:self.textFieldAmount.text];
+    model.ReportTotal = [self.textFieldAmount.text doubleValue];
+//    model.location = self.labelCurrentLocation.text;
+    model.ReportDate = self.labelCurrentTime.text;
+    
+    if(model.ReportId)
+    {
+        [self EditReport];
+    }
+    else
+    {
+        [self CreateReport];
+    }
+    
+    
+    //Close the screen
+    if([self.presentingViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)])
+        [self.presentingViewController dismissViewControllerAnimated:(YES) completion:nil];
+    else if([self.presentingViewController respondsToSelector:@selector(dismissModalViewControllerAnimated:)])
+        [self.presentingViewController dismissModalViewControllerAnimated:YES];
+    else
+        NSLog(@"Oooops, what system is this ?!!! - should never see this !");
+    
+}
+
+- (void)CreateReport
+{
+    NSLog(@"Create Report");
+
+    NSString *url = [NSString stringWithFormat:@"%@/api/expense/expensereport/v1.1/report",kURL];
+    
+    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.accessToken];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request addValue:authHeaderValue forHTTPHeaderField:@"Authorization"];
+    
+    [request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
+    
+    NSString *str = [NSString stringWithFormat:@"<Report xmlns=\"http://www.concursolutions.com/api/expense/expensereport/2011/03\"><Name>%@</Name></Report>",_textFieldName.text];
+    
+    NSData *data1 = [NSMutableData dataWithBytes: [str UTF8String] length: [str length]];
+    [request setHTTPBody:data1];
+    
+    NSData *data12 = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *response = [[NSString alloc] initWithData:data12 encoding:NSUTF8StringEncoding];
+//    NSLog(@"%@",response);
+    
+    if(response.length > 0)
+    {
+        RXMLElement *rootXML = [RXMLElement elementFromXMLString:response encoding:NSUTF8StringEncoding];
+        if([rootXML child:@"Status"])
+        {
+            NSString *status = [[rootXML child:@"Status"] text];
+            if(status)
+            {
+                if([status isEqualToString:@"SUCCESS"])
+                {
+                    NSLog(@"Report Created SUCCESS");
+                    
+                    NSString *detailurl = [[rootXML child:@"Report-Details-Url"]text];
+
+                    
+//                  to Create Entry in report
+                    
+                    
+                    NSArray *arr = [detailurl componentsSeparatedByString:@"/"];
+                    NSString *strReportId = [arr lastObject];
+                    
+                    NSDate *objdate = [NSDate date];
+                    NSDateFormatter *dateformatter = [[NSDateFormatter alloc]init];
+                    [dateformatter setDateFormat:@"yyyy-MM-dd"];
+                    NSString *strdate = [dateformatter stringFromDate:objdate];
+                    
+                    NSString *strUrl1 = [NSString stringWithFormat:@"%@/api/expense/expensereport/v1.1/report/%@/entry/",kURL,strReportId];
+                    NSMutableURLRequest *requestCreateEntry = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl1]];
+                    
+                    NSString *strXml = [NSString stringWithFormat:@"<ReportEntries xmlns=\"http://www.concursolutions.com/api/expense/expensereport/2011/03\"><Expense><CrnCode>USD</CrnCode><ExpKey>%@</ExpKey><TransactionDate>%@</TransactionDate><TransactionAmount>%@</TransactionAmount><IsPersonal>N</IsPersonal></Expense></ReportEntries>",strExpKey,strdate,_textFieldAmount.text];
+                    
+                    [requestCreateEntry addValue:authHeaderValue forHTTPHeaderField:@"Authorization"];
+                    
+                    [requestCreateEntry addValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
+                    
+                    [requestCreateEntry setHTTPMethod:@"POST"];
+                    
+                    NSData *dataXML = [NSMutableData dataWithBytes: [strXml UTF8String] length: [strXml length]];
+                    [requestCreateEntry setHTTPBody:dataXML];
+                    
+                    NSData *dataEntryResponse = [NSURLConnection sendSynchronousRequest:requestCreateEntry returningResponse:nil error:nil];
+                    NSString *responsexml = [[NSString alloc] initWithData:dataEntryResponse encoding:NSUTF8StringEncoding];
+//                    NSLog(@"%@",responsexml);
+                    if(responsexml.length > 0)
+                    {
+                        RXMLElement *rootEntryXML = [RXMLElement elementFromXMLString:responsexml encoding:NSUTF8StringEncoding];
+                        if([rootEntryXML child:@"Status"])
+                        {
+                            NSString *statusEntry = [[rootEntryXML child:@"Status"] text];
+                            if(statusEntry)
+                            {
+                                if([statusEntry isEqualToString:@"SUCCESS"])
+                                {
+                                    NSLog(@"Report Entry Created SUCCESS");
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Some error has occured.Please tyr again later" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                        [al show];
+                    }
+                    
+                }
+            }
+        }
+    }
+    else
+    {
+        UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Some error has occured.Please tyr again later" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [al show];
+
+    }
+    
+    [self performSelectorOnMainThread:@selector(removeWaitView) withObject:Nil waitUntilDone:NO];
+
+}
+
+- (void)EditReport
+{
+    NSLog(@"Edit Report");
+//    NSString *url = [NSString stringWithFormat:@"%@/api/expense/expensereport/v1.1/report/%@",kURL,model.ReportId];
+//    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//    
+    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.accessToken];
+//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+//    [request setHTTPMethod:@"POST"];
+//    [request addValue:authHeaderValue forHTTPHeaderField:@"Authorization"];
+//    //    [request addValue:@"dimplebhvasar@gmail.com" forHTTPHeaderField:@"X-UserID"];
+//    
+//    [request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
+//    
+//    NSString *str = [NSString stringWithFormat:@"<Report xmlns=\"http://www.concursolutions.com/api/expense/expensereport/2011/03\"><Name>%@</Name></Report>",_textFieldName.text];
+//    
+//    NSData *data1 = [NSMutableData dataWithBytes: [str UTF8String] length: [str length]];
+//    [request setHTTPBody:data1];
+//    
+//    NSData *data12 = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+//    NSString *response = [[NSString alloc] initWithData:data12 encoding:NSUTF8StringEncoding];
+//    NSLog(@"%@",response);
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    
+//    if(response.length > 0)
+//    {
+//        RXMLElement *rootXML = [RXMLElement elementFromXMLString:response encoding:NSUTF8StringEncoding];
+//        if([rootXML child:@"Status"])
+//        {
+//            NSString *status = [[rootXML child:@"Status"] text];
+//            if(status)
+//            {
+//                if([status isEqualToString:@"SUCCESS"])
+//                {
+//                    NSLog(@"Report Edited SUCCESS");
+//                    
+//                    NSString *detailurl = [[rootXML child:@"Report-Details-Url"]text];
+//                    
+    
+//                  To Edit Entry in report
+                    
+                    
+//                    NSArray *arr = [detailurl componentsSeparatedByString:@"/"];
+//                    NSString *strReportId = [arr lastObject];
+    
+                    NSDate *objdate = [NSDate date];
+                    NSDateFormatter *dateformatter = [[NSDateFormatter alloc]init];
+                    [dateformatter setDateFormat:@"yyyy-MM-dd"];
+                    NSString *strdate = [dateformatter stringFromDate:objdate];
+                    
+                    NSString *strUrl1 = [NSString stringWithFormat:@"%@/api/expense/expensereport/v1.1/report/%@/entry/%@",kURL,model.ReportId,self.model.entryId];
+                    NSMutableURLRequest *requestCreateEntry = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl1]];
+                    
+                    NSString *strXml = [NSString stringWithFormat:@"<ReportEntries xmlns=\"http://www.concursolutions.com/api/expense/expensereport/2011/03\"><Expense><CrnCode>USD</CrnCode><ExpKey>%@</ExpKey><TransactionDate>%@</TransactionDate><TransactionAmount>%@</TransactionAmount><IsPersonal>N</IsPersonal></Expense></ReportEntries>",strExpKey,strdate,_textFieldAmount.text];
+                    
+                    [requestCreateEntry addValue:authHeaderValue forHTTPHeaderField:@"Authorization"];
+                    
+                    [requestCreateEntry addValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
+                    
+                    [requestCreateEntry setHTTPMethod:@"POST"];
+                    
+                    NSData *dataXML = [NSMutableData dataWithBytes: [strXml UTF8String] length: [strXml length]];
+                    [requestCreateEntry setHTTPBody:dataXML];
+                    
+                    NSData *dataEntryResponse = [NSURLConnection sendSynchronousRequest:requestCreateEntry returningResponse:nil error:nil];
+                    NSString *responsexml = [[NSString alloc] initWithData:dataEntryResponse encoding:NSUTF8StringEncoding];
+                    //                    NSLog(@"%@",responsexml);
+                    if(responsexml.length > 0)
+                    {
+                        RXMLElement *rootEntryXML = [RXMLElement elementFromXMLString:responsexml encoding:NSUTF8StringEncoding];
+                        
+
+                        if([rootEntryXML children:@"ReportEntryStatus"])
+                        {
+                            RXMLElement *entryxml = [[rootEntryXML children:@"ReportEntryStatus"] objectAtIndex:0];
+                            NSString *statusEntry = [[entryxml child:@"Status"] text];
+                            if(statusEntry)
+                            {
+                                if([statusEntry isEqualToString:@"SUCCESS"])
+                                {
+                                    NSLog(@"Report Entry Edited SUCCESS");
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Some error has occured.Please tyr again later" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                        [al show];
+                    }
+                    
+//                }
+//            }
+//        }
+//    }
+//    else
+//    {
+//        UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Some error has occured.Please tyr again later" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+//        [al show];
+//        
+//    }
+
+[self performSelectorOnMainThread:@selector(removeWaitView) withObject:Nil waitUntilDone:NO];
+    
+}
+
+
+//- (NSString *) xmlEscape: (NSString*)src
+//{
+//    NSMutableString *str = [NSMutableString stringWithString:src];
+//    [str replaceOccurrencesOfString:@"&"  withString:@"&amp;"  options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+//    [str replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+//    [str replaceOccurrencesOfString:@"'"  withString:@"&apos;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+//    [str replaceOccurrencesOfString:@">"  withString:@"&gt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+//    [str replaceOccurrencesOfString:@"<"  withString:@"&lt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+//    
+//    return str;
+//    
+//}
+
 
 
 #pragma mark - textfield delegate
 
--(BOOL) textFieldShouldReturn:(UITextField *)textField{
+-(BOOL) textFieldShouldReturn:(UITextField *)textField
+{
     
     [textField resignFirstResponder];
     return YES;
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if(textField.tag == 3)
+    {
+        [_textFieldAmount resignFirstResponder];
+        [_textFieldName resignFirstResponder];
+        
+        picker.hidden = FALSE;
+        if(textField.text.length == 0)
+        {
+            [picker selectRow:0 inComponent:0 animated:NO];
+        }
+        else if([textField.text isEqualToString:@"Breakfast"])
+        {
+            [picker selectRow:0 inComponent:0 animated:NO];
+        }
+        else if([textField.text isEqualToString:@"Lunch"])
+        {
+            [picker selectRow:1 inComponent:0 animated:NO];
+        }
+        else if([textField.text isEqualToString:@"Dinner"])
+        {
+            [picker selectRow:2 inComponent:0 animated:NO];
+        }
+        
+        return NO;
+    }
+    else
+        return YES;
+}
+
+#pragma mark - UIPickerView Delegate
+
+
+// returns the number of 'columns' to display.
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// returns the # of rows in each component..
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return arrPicker.count;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [arrPicker objectAtIndex:row];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    [txtExpType setText:[arrPicker objectAtIndex:row]];
+    picker.hidden = TRUE;
+    
+    if(row == 0)
+        strExpKey = @"BRKFT";
+    else if(row == 1)
+        strExpKey = @"LUNCH";
+    else
+        strExpKey = @"DINNR";
 }
 
 
@@ -326,27 +663,55 @@ UIPopoverController *popover;
     //configure the model stuff
     //LBModel *model = (LBModel *)[self.tableData objectAtIndex:indexPath.row];
     //cell.textLabel.text = model[@"name"]; // [model objectForKeyedSubscript:@"name"];
+    appdel = [UIApplication sharedApplication].delegate;
     
+    if([self.Flag isEqualToString:@"CREATE"])
+    {
+        txtExpType.userInteractionEnabled = TRUE;
+        _textFieldName.userInteractionEnabled = TRUE;
+        _textFieldName.backgroundColor = [UIColor clearColor];
+        txtExpType.backgroundColor =[UIColor whiteColor];
+    }
+    else
+    {
+        txtExpType.userInteractionEnabled = FALSE;
+        _textFieldName.userInteractionEnabled = FALSE;
+        _textFieldName.backgroundColor = [UIColor lightGrayColor];
+        txtExpType.backgroundColor =[UIColor lightGrayColor];
+
+    }
     
-    NSLog(@"Model Loaded %@",[[NSString alloc] initWithFormat:@"%@ $ %@",
-                                      [[self model] name],
-                                      [[self model] amount]
+    arrPicker = [NSArray arrayWithObjects:@"Breakfast",@"Lunch",@"Dinner",nil];
+    
+    NSLog(@"Model Loaded %@",[[NSString alloc] initWithFormat:@"%@ $ %.2lf",
+                                      [[self model] ReportName],
+                                      [[self model] ReportTotal]
                                       ] );
     
-    self.labelCurrentLocation.text = [[NSString alloc] initWithFormat:@"%@", [[self model] location] ];
-    self.textFieldName.text = [[NSString alloc] initWithFormat:@"%@", [[self model] name] ];
-    self.textFieldAmount.text = [[NSString alloc] initWithFormat:@"%@", [[self model] amount] ];
+//    self.labelCurrentLocation.text = [[NSString alloc] initWithFormat:@"%@", [[self model] location] ];
+    self.textFieldName.text = [[NSString alloc] initWithFormat:@"%@", [[self model] ReportName] ];
+    self.textFieldAmount.text = [[NSString alloc] initWithFormat:@"%.2lf", [[self model] ReportTotal] ];
+    self.txtExpType.text = [[NSString alloc] initWithFormat:@"%@", [[self model] ExpenseType] ];
+    strExpKey = [[self model] ExpenseTypeId];
     
-    
-    NSDate *today = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    NSDate *today = [NSDate date];
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     
     // display in 12HR/24HR (i.e. 11:25PM or 23:25) format according to User Settings
-    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    NSString *currentTime = [dateFormatter stringFromDate:today];
+//    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+//    NSString *currentTime = [dateFormatter stringFromDate:today];
     
-    self.labelCurrentTime.text = [[NSString alloc] initWithFormat:@"%@", currentTime ];
+//    self.labelCurrentTime.text = [[NSString alloc] initWithFormat:@"%@", currentTime ];
     self.labelCurrentLocation.text = @"San Francisco, CA";
+
+//    txtExpType.text = [[self model] ExpenseType];
+//    if([strExpKey isEqualToString:@"DINNR"])
+//        txtExpType.text = @"Dinner";
+//    else if ([strExpKey isEqualToString:@"LUNCH"])
+//        txtExpType.text = @"Lunch";
+//    else
+//        txtExpType.text = @"Breakfast";
+
 
 }
 

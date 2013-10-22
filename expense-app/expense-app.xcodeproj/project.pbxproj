@@ -40,6 +40,7 @@
 		CE5EC8DC1816897A008FF3AB /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5EC8DA1816897A008FF3AB /* libxml2.2.dylib */; };
 		CE5EC8DD1816897A008FF3AB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5EC8DB1816897A008FF3AB /* libxml2.dylib */; };
 		CE5EC8E018168D2A008FF3AB /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5EC8DF18168D2A008FF3AB /* Base64.m */; };
+		CE5EC8E3181690E9008FF3AB /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5EC8E2181690E9008FF3AB /* RXMLElement.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,8 @@
 		CE5EC8DB1816897A008FF3AB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		CE5EC8DE18168D2A008FF3AB /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		CE5EC8DF18168D2A008FF3AB /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
+		CE5EC8E1181690E9008FF3AB /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
+		CE5EC8E2181690E9008FF3AB /* RXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RXMLElement.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +193,8 @@
 				AEEA5E8E17FA3AC40024A46D /* ExpenseModel.m */,
 				AEEA5EC517FA3CFE0024A46D /* ModelUser.h */,
 				AEEA5EC617FA3CFE0024A46D /* ModelUser.m */,
+				CE5EC8E1181690E9008FF3AB /* RXMLElement.h */,
+				CE5EC8E2181690E9008FF3AB /* RXMLElement.m */,
 				AE578DA017F6F6B80036CF07 /* utility.h */,
 				AE578D8E17F6F6590036CF07 /* neg_itemize_icon.png */,
 				AE578D8F17F6F6590036CF07 /* neg_itemize_icon@2x.png */,
@@ -365,6 +370,7 @@
 				AEC5B8F917F6B59B00A2A565 /* AppDelegate.m in Sources */,
 				AEC5B8F517F6B59B00A2A565 /* main.m in Sources */,
 				AEC5B92217F6B5F600A2A565 /* ExpenseListViewController.m in Sources */,
+				CE5EC8E3181690E9008FF3AB /* RXMLElement.m in Sources */,
 				CE5EC8E018168D2A008FF3AB /* Base64.m in Sources */,
 				AEEA5EC717FA3CFE0024A46D /* ModelUser.m in Sources */,
 				AEEA5E8F17FA3AC40024A46D /* ExpenseModel.m in Sources */,

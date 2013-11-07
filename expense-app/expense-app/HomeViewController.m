@@ -6,6 +6,11 @@
 //  Copyright (c) 2013 Matt Schmulen. All rights reserved.
 //
 
+
+#define maxheight  150
+#define maxwidth  150
+
+
 #import "HomeViewController.h"
 #import "AppDelegate.h"
 
@@ -20,7 +25,7 @@
 @interface HomeViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonLogin;
-@property (weak, nonatomic) IBOutlet UIImageView *imageUser;
+@property (strong, nonatomic) IBOutlet UIImageView *imageUser;
 
 @end
 
@@ -29,7 +34,61 @@
 UISwitch *editSwitch;
 UIPopoverController *popover;
 
-@synthesize imagePicker, usedCamera;
+@synthesize imagePicker, usedCamera,imageUser;
+
+#pragma mark - Image picker Delegate
+
+// Finished saving
+- (void)image:(UIImage *)image didFinishSavingWithError: (NSError *)error contextInfo:(void *)contextInfo;
+{
+    // Handle the end of the image write process
+    if (!error)
+        NSLog(@"Image written to photo album");
+    else
+        NSLog(@"Error writing to photo album: %@", error.localizedFailureReason);
+}
+
+// Update image and for iPhone, dismiss the controller
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    // Use the edited image if available
+    UIImage __autoreleasing *image = info[UIImagePickerControllerEditedImage];
+    
+    // If not, grab the original image
+    if (!image) image = info[UIImagePickerControllerOriginalImage];
+    
+    NSURL *assetURL = info[UIImagePickerControllerReferenceURL];
+    if (!image && !assetURL)
+    {
+        NSLog(@"Cannot retrieve an image from the selected item. Giving up.");
+    }
+    else if (!image)
+    {
+        NSLog(@"Retrieving from Assets Library");
+        [self loadImageFromAssetURL:assetURL into:&image];
+    }
+    
+    if (image)
+    {
+        // Save the image
+        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+        
+        //MAS UPDATE THE IMAGE VIEW RECEIPT
+        imageUser.image = image;
+    }
+    
+    [self performDismiss];
+}
+
+// Dismiss picker
+- (void) imagePickerControllerDidCancel: (UIImagePickerController *)picker
+{
+    [self performDismiss];
+}
+
+
+#pragma mark - Actions
+
 
 - (IBAction)actionPhotoPick:(id)sender {
     
@@ -70,15 +129,14 @@ NSString *imgUrl;
     
 }
 
+
+
 - (void)HpUploadTo_ObjectStorage
 {
-    NSData *imageData = UIImageJPEGRepresentation(_imageUser.image, 90);
+    NSData *imageData = UIImageJPEGRepresentation(imageUser.image, 90);
     
     int r = arc4random_uniform(100000);
-
-    
-//    NSMutableData *body = [NSMutableData data];
-    
+   
     imgUrl = [NSString stringWithFormat:@"https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681/FaceVarify/%@/Image%d.jpg",appdel.hpToken,r];
     
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:imgUrl]];
@@ -86,24 +144,23 @@ NSString *imgUrl;
     
     [request setHTTPMethod:@"PUT"];
 
-    
-//    NSMutableData *data = [[NSString stringWithFormat:@""] dataUsingEncoding:NSUTF8StringEncoding];
-//    [data appendData:imageData];
     [request setHTTPBody:imageData];
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *returnStr = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     NSLog(@"OBJ_STORAGE:returnStr:%@",returnStr);
+
+// Temp Close Code for image store in local
     
-    NSString *imageName = @"userImage.jpg";
-    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [paths objectAtIndex:0];
-
-    // Now we get the full path to the file
-    NSString* fullPathToFile = [documentsDirectory stringByAppendingPathComponent:imageName];
-
-    // and then we write it out
-    [imageData writeToFile:fullPathToFile atomically:NO];
+//    NSString *imageName = @"userImage.jpg";
+//    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString* documentsDirectory = [paths objectAtIndex:0];
+//
+//    // Now we get the full path to the file
+//    NSString* fullPathToFile = [documentsDirectory stringByAppendingPathComponent:imageName];
+//
+//    // and then we write it out
+//    [imageData writeToFile:fullPathToFile atomically:NO];
 
     
 }
@@ -122,44 +179,205 @@ NSString *imgUrl;
     
     NSURLResponse *response;
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse: &response error: nil ];
-//    https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681/FaceVarify
+
     NSString *str = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     NSLog(@"Response::%@",str);
     if([str length]> 0)
     {
         NSDictionary *DataDict = [NSJSONSerialization JSONObjectWithData:returnData options:NSJSONReadingMutableContainers error:nil];
         
-        if(DataDict.count > 1)
+        if(DataDict.count > 0)
         {
             NSArray *arrFace = [DataDict objectForKey:@"face"];
+//            UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"Face detection" message:[NSString stringWithFormat:@"%d face(s) detected",[arrFace count]] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+//            [al show];
             [self drawFaces:arrFace];
         }
+        else
+        {
+            UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"Face detection" message:@"No faces detected" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [al show];
+
+        }
+        
     }
     else
     {
         NSLog(@"No Faces Detected");
+        UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"Face detection" message:@"No faces detected" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [al show];
+
     }
+    
+//    Now Delete Image from Hp Cloud
+    
+//    NSMutableURLRequest *delRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681?bulk-delete"]];
+//    [request setValue:appdel.hpToken forHTTPHeaderField:@"X-Auth-Token"];
+//
+//    [request setHTTPMethod:@"DELETE"];
+//    [request setValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
+//    NSString *body = [NSString stringWithFormat:@"FaceVarify/Image82850.jpg"];
+//    NSData *databody = [body dataUsingEncoding:NSUTF8StringEncoding];
+//    
+//    [request setHTTPBody:databody];
+//    
+//    NSData *returnDataDel = [NSURLConnection sendSynchronousRequest:delRequest returningResponse:nil error:nil];
+//    NSString *returnStrDel = [[NSString alloc] initWithData:returnDataDel encoding:NSUTF8StringEncoding];
+//    NSLog(@"bulk-delete:returnStr:%@",returnStrDel);
+
+    
 }
 
 -(void) drawFaces:(NSArray *)arrFace
 {
     NSLog(@"%d Faces Detected",arrFace.count);
     
-    CGRect rectangle = CGRectMake(10, 10, 30, 50);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetRGBFillColor(context, 1.0, 0.0, 0.0, 1.0);
-    CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
-    CGContextFillRect(context, rectangle);
+    float rate = 1;
+    float imgwidth = 150;
+    float imgheight = 150;
+    float imgH = imageUser.image.size.height;
+    float imgw = imageUser.image.size.width;
     
-    [imageDrawView drawRect:rectangle];
+    
+    if (imgw / imgwidth > imgH / imgheight)
+    {
+        if (imgheight > 150 && imgwidth > 320)
+        {
+            imgwidth = 320;
+        }
+        rate = imgwidth / imgw;
+        
+        if (rate > 1)
+        {
+            rate = 1;
+            imgwidth = imgw;
+            imgheight = imgH;
+        }
+        else
+        {
+            imgheight = imgH * rate;
+        }
+    }
+    else
+    {
+        rate = imgheight / imgH;
+        
+        if (imgheight > 150 && imgwidth > 320)
+        {
+            imgheight = 150;
+        }
+        if (rate > 1)
+        {
+            rate = 1;
+            imgwidth = imgw;
+            imgheight = imgH;
+        }
+        else
+        {
+            imgwidth = imgw * rate;
+        }
+    }
 
+    
+    for (int i = 0; i < arrFace.count; i++)
+    {
+        NSLog(@"Drawing Rect %d",i);
+        NSDictionary *dict = [arrFace objectAtIndex:i];
+        CGFloat left1 = [[dict objectForKey:@"bb_left"] floatValue];
+        CGFloat top1 = [[dict objectForKey:@"bb_top"] floatValue];
+        CGFloat right1 = [[dict objectForKey:@"bb_right"] floatValue];
+        CGFloat bottom1 = [[dict objectForKey:@"bb_bottom"] floatValue];
+        
+        
+        CGFloat top = top1 * rate + (maxheight - imgheight) / 2;
+        CGFloat left = left1 * rate + (maxwidth - imgwidth) / 2;
+        CGFloat height = (bottom1 - top1) * rate;
+        CGFloat width = (right1 - left1) * rate;
+        
+        CGRect rect = CGRectMake(left, top, width, height);
+//        CGRect rect = CGRectMake(left1, top1, right1, bottom1);
+        [self drawOnImage:rect];
+        
+    }
+
+}
+
+
+- (void)drawOnImage:(CGRect)rect
+{
+    
+    
+    NSLog(@"Creating image");
+    
+    CGRect rect1 = [imageUser bounds];
+    UIGraphicsBeginImageContextWithOptions(rect1.size,YES,0.0f);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [imageUser.layer renderInContext:context];
+    UIImage *capturedImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    
+    CGSize size = CGSizeMake(150.0f, 150.0f);
+    UIGraphicsBeginImageContext(size);
+    
+    CGContextRef context1 = UIGraphicsGetCurrentContext();
+    [capturedImage drawAtPoint:CGPointMake(0,0)];
+    CGContextSetStrokeColorWithColor(context1, [[UIColor blackColor] CGColor]);
+    
+//    CGRect rect2 = CGRectMake(20, 20, 50, 50);
+    CGContextSetStrokeColorWithColor(context1, [[UIColor whiteColor] CGColor]);
+    CGContextAddRect(context1, rect);
+    CGContextStrokeRectWithWidth(context1, rect, 2.0);
+    NSLog(@"\nRect : %.2f,%.2f,%.2f,%.2f",rect.origin.x,rect.origin.y,rect.size.width,rect.size.height);
+    UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    imageUser.image = result;
+    [imageUser setNeedsDisplay];
+    
+    NSLog(@"Image creation finished");
+ 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    UIGraphicsBeginImageContext(imageUser.image.size);
+//    
+//    // Pass 1: Draw the original image as the background
+//    [imageUser.image drawAtPoint:CGPointMake(0,0)];
+//    
+//    // Pass 2: Draw the line on top of original image
+//    UIColor *lineColor = [UIColor whiteColor];
+//
+//
+////    CGContextSetLineWidth(context, 1.0);
+////    CGContextMoveToPoint(context, 0, 0);
+//    CGContextAddRect(context, rect);
+//    
+////    CGContextAddLineToPoint(context, imageUser.image.size.width, 0);
+//    CGContextSetStrokeColorWithColor(context, [lineColor CGColor]);
+//    CGContextStrokePath(context);
+//    
+//    // Create new image
+//    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+//    [imageUser setImage:newImage];
+//    // Tidy up
+//    UIGraphicsEndImageContext();
+    
 }
 
 /*
 - (void)HpFaceDetection
 {
     
-    NSData *imageData = UIImageJPEGRepresentation(_imageUser.image, 90);
+    NSData *imageData = UIImageJPEGRepresentation(imageUser.image, 90);
     
     NSMutableData *body = [NSMutableData data];
     
@@ -218,14 +436,14 @@ NSString *imgUrl;
 - (void)HpFaceDetection
 {
     NSData *imageData;
-    if(!_imageUser.image)
+    if(!imageUser.image)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please Upload Photo" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:Nil, nil];
         [alert show];
     }
     else
     {
-        imageData = UIImageJPEGRepresentation(_imageUser.image, 90);
+        imageData = UIImageJPEGRepresentation(imageUser.image, 90);
     }
     
     
@@ -381,56 +599,6 @@ NSString *imgUrl;
     [library assetForURL:assetURL resultBlock:resultsBlock failureBlock:failure];
 }
 
-// Finished saving
-- (void)image:(UIImage *)image didFinishSavingWithError: (NSError *)error contextInfo:(void *)contextInfo;
-{
-    // Handle the end of the image write process
-    if (!error)
-        NSLog(@"Image written to photo album");
-    else
-        NSLog(@"Error writing to photo album: %@", error.localizedFailureReason);
-}
-
-// Update image and for iPhone, dismiss the controller
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    // Use the edited image if available
-    UIImage __autoreleasing *image = info[UIImagePickerControllerEditedImage];
-    
-    // If not, grab the original image
-    if (!image) image = info[UIImagePickerControllerOriginalImage];
-    
-    NSURL *assetURL = info[UIImagePickerControllerReferenceURL];
-    if (!image && !assetURL)
-    {
-        NSLog(@"Cannot retrieve an image from the selected item. Giving up.");
-    }
-    else if (!image)
-    {
-        NSLog(@"Retrieving from Assets Library");
-        [self loadImageFromAssetURL:assetURL into:&image];
-    }
-    
-    if (image)
-    {
-        // Save the image
-        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
-        
-        //MAS UPDATE THE IMAGE VIEW RECEIPT
-        _imageUser.image = image;
-    }
-    
-    [self performDismiss];
-}
-
-// Dismiss picker
-- (void) imagePickerControllerDidCancel: (UIImagePickerController *)picker
-{
-    [self performDismiss];
-}
-
-
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -450,7 +618,7 @@ NSString *imgUrl;
 	// Do any additional setup after loading the view.
 //    [AppDelegate initializeServerData];
 //    [AppDelegate updateHPToken];
-    
+        
 }
 
 - (void)didReceiveMemoryWarning

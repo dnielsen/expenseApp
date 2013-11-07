@@ -20,7 +20,7 @@
 @property (strong, nonatomic) NSString *Cpassword;
 @property (strong, nonatomic) NSString *HPusername;
 @property (strong, nonatomic) NSString *HPpassword;
-
+@property (nonatomic) CGContextRef ctx;
 
 //- (void)authenticateUser:(NSString *)uname1 : (NSString *)pass1;
 

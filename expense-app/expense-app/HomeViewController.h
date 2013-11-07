@@ -12,12 +12,13 @@
 @interface HomeViewController : UIViewController < UIImagePickerControllerDelegate, UIPopoverControllerDelegate>
 {
     AppDelegate *appdel;
-    IBOutlet UIView *imageDrawView;
+    IBOutlet UIImageView *imageUser;
+    UIImage *resizeImg;
 }
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 @property BOOL usedCamera;
 
-- (void)HpFaceDetection;
+- (void)HpFaceDetection1;
 - (void)HpAuthentication;
 
 @end

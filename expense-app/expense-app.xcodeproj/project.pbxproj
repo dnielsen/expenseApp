@@ -32,6 +32,7 @@
 		AEEA5E6C17FA25550024A46D /* Mark_Dave.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEA5E6A17FA25550024A46D /* Mark_Dave.png */; };
 		AEEA5E8F17FA3AC40024A46D /* ExpenseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AEEA5E8E17FA3AC40024A46D /* ExpenseModel.m */; };
 		AEEA5EC717FA3CFE0024A46D /* ModelUser.m in Sources */ = {isa = PBXBuildFile; fileRef = AEEA5EC617FA3CFE0024A46D /* ModelUser.m */; };
+		CE4657361823B76600B39206 /* default_user.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE4657351823B76600B39206 /* default_user.jpg */; };
 		CE5EC8D11816893F008FF3AB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5EC8D01816893F008FF3AB /* CFNetwork.framework */; };
 		CE5EC8D318168949008FF3AB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5EC8D218168949008FF3AB /* SystemConfiguration.framework */; };
 		CE5EC8D518168951008FF3AB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5EC8D418168951008FF3AB /* Security.framework */; };
@@ -90,6 +91,7 @@
 		AEEA5E8E17FA3AC40024A46D /* ExpenseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpenseModel.m; sourceTree = "<group>"; };
 		AEEA5EC517FA3CFE0024A46D /* ModelUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelUser.h; sourceTree = "<group>"; };
 		AEEA5EC617FA3CFE0024A46D /* ModelUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelUser.m; sourceTree = "<group>"; };
+		CE4657351823B76600B39206 /* default_user.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_user.jpg; sourceTree = "<group>"; };
 		CE5EC8D01816893F008FF3AB /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CE5EC8D218168949008FF3AB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CE5EC8D418168951008FF3AB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -197,6 +199,7 @@
 				CE5EC8E2181690E9008FF3AB /* RXMLElement.m */,
 				AE578DA017F6F6B80036CF07 /* utility.h */,
 				AE578D8E17F6F6590036CF07 /* neg_itemize_icon.png */,
+				CE4657351823B76600B39206 /* default_user.jpg */,
 				AE578D8F17F6F6590036CF07 /* neg_itemize_icon@2x.png */,
 				AE578D9817F6F69E0036CF07 /* neg_attendee_icon.png */,
 				AE578D9917F6F69E0036CF07 /* neg_attendee_icon@2x.png */,
@@ -343,6 +346,7 @@
 				AEC5B8F317F6B59B00A2A565 /* InfoPlist.strings in Resources */,
 				AEEA5E6C17FA25550024A46D /* Mark_Dave.png in Resources */,
 				AEC5B8FC17F6B59B00A2A565 /* Main.storyboard in Resources */,
+				CE4657361823B76600B39206 /* default_user.jpg in Resources */,
 				AE578D9017F6F6590036CF07 /* neg_itemize_icon.png in Resources */,
 				AE578D9117F6F6590036CF07 /* neg_itemize_icon@2x.png in Resources */,
 				AE578D9E17F6F69E0036CF07 /* neg_expense_icon.png in Resources */,

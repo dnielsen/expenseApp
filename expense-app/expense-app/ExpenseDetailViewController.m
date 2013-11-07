@@ -231,7 +231,7 @@ UIPopoverController *popover;
 
     NSString *url = [NSString stringWithFormat:@"%@/api/expense/expensereport/v1.1/report",kURL];
     
-    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.accessToken];
+    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.ConcurToken];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
     [request addValue:authHeaderValue forHTTPHeaderField:@"Authorization"];
@@ -332,7 +332,7 @@ UIPopoverController *popover;
 //    NSString *url = [NSString stringWithFormat:@"%@/api/expense/expensereport/v1.1/report/%@",kURL,model.ReportId];
 //    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 //    
-    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.accessToken];
+    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.ConcurToken];
 //    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
 //    [request setHTTPMethod:@"POST"];
 //    [request addValue:authHeaderValue forHTTPHeaderField:@"Authorization"];

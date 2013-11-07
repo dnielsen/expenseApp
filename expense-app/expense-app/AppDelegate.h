@@ -14,9 +14,13 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) NSString *accessToken;
-@property (strong, nonatomic) NSString *username;
-@property (strong, nonatomic) NSString *password;
+@property (strong, nonatomic) NSString *ConcurToken;
+@property (strong, nonatomic) NSString *hpToken;
+@property (strong, nonatomic) NSString *Cusername;
+@property (strong, nonatomic) NSString *Cpassword;
+@property (strong, nonatomic) NSString *HPusername;
+@property (strong, nonatomic) NSString *HPpassword;
+
 
 //- (void)authenticateUser:(NSString *)uname1 : (NSString *)pass1;
 

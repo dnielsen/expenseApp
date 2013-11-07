@@ -11,7 +11,7 @@
 
 @implementation AppDelegate
 
-@synthesize accessToken,username,password;
+@synthesize ConcurToken,Cusername,Cpassword,HPusername,HPpassword,hpToken;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

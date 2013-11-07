@@ -81,7 +81,7 @@
         {
             RXMLElement *rxmlToken = [rootXML child:@"Token"];
             NSLog(@"token: %@", [rxmlToken text]);
-            appdel.accessToken = [rxmlToken text];
+            appdel.ConcurToken = [rxmlToken text];
 
             [self addWaitView];
             [self performSelector:@selector(getModels) withObject:nil afterDelay:0.0];
@@ -127,10 +127,10 @@
     
 //    NSString *url = [NSString stringWithFormat:@"%@/api/expense/expensereport/v2.0/Reports/?status=ACTIVE",kURL];
 
-    NSString *url = [NSString stringWithFormat:@"%@/api/expense/expensereport/v2.0/Reports/?loginid=%@",kURL,appdel.username];
+    NSString *url = [NSString stringWithFormat:@"%@/api/expense/expensereport/v2.0/Reports/?loginid=%@",kURL,appdel.Cusername];
     
 
-    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.accessToken];
+    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.ConcurToken];
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
 //    [request setHTTPMethod:@"GET"];
@@ -246,7 +246,7 @@
 {
     NSString *url = [NSString stringWithFormat:@"%@/api/expense/expensereport/v2.0/report/%@",kURL,repId];
     
-    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.accessToken];
+    NSString *authHeaderValue = [NSString stringWithFormat:@"OAuth %@", appdel.ConcurToken];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     
@@ -432,7 +432,7 @@
     [super viewDidLoad];
     appdel = [UIApplication sharedApplication].delegate;
     a = 0;
-    if(!appdel.accessToken)
+    if(!appdel.ConcurToken)
     {
         //    Code for asking user details
         NSLog(@"Authentication Details for Concur");
@@ -476,9 +476,9 @@
             NSLog(@"Authentication process starts");
             
             NSString *uname = [[alertView textFieldAtIndex:0] text];
-            appdel.username = uname;
+            appdel.Cusername = uname;
             NSString *pass = [[alertView textFieldAtIndex:1] text];
-            appdel.password = pass;
+            appdel.Cpassword = pass;
             if([uname isEqualToString:@""] || [pass isEqualToString:@""])
             {
                 UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"ALERT!" message:@"Please provide username and password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];

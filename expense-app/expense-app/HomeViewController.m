@@ -110,18 +110,8 @@ NSString *imgUrl;
 
 - (IBAction)actionSubmitImageToHP:(id)sender
 {
-    
-    NSLog(@"actionSubmitImageToHP");
-//    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"HpToken"])
-        [self HpAuthentication];
-//    else
-//    {
-//        appdel.hpToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"HpToken"];
-//    }
-//    *************************** HP Face Detection Start *****************************************************
-    [self HpUploadTo_ObjectStorage];
-    
-    [self HpFaceDetection1];
+    [self addWaitView];
+    [self performSelector:@selector(callSubmitToHP) withObject:nil afterDelay:0.2];
     
     
     
@@ -129,6 +119,22 @@ NSString *imgUrl;
     
 }
 
+- (void)callSubmitToHP
+{
+    NSLog(@"actionSubmitImageToHP");
+
+    //    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"HpToken"])
+    [self HpAuthentication];
+    //    else
+    //    {
+    //        appdel.hpToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"HpToken"];
+    //    }
+    //    *************************** HP Face Detection Start *****************************************************
+    [self HpUploadTo_ObjectStorage];
+    
+    [self HpFaceDetection1];
+    
+}
 
 
 - (void)HpUploadTo_ObjectStorage
@@ -137,7 +143,7 @@ NSString *imgUrl;
     
     int r = arc4random_uniform(100000);
    
-    imgUrl = [NSString stringWithFormat:@"https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681/FaceVarify/%@/Image%d.jpg",appdel.hpToken,r];
+    imgUrl = [NSString stringWithFormat:@"https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681/FaceVarify/ImageFace/Image%d.jpg",r];
     
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:imgUrl]];
     [request setValue:appdel.hpToken forHTTPHeaderField:@"X-Auth-Token"];
@@ -181,7 +187,7 @@ NSString *imgUrl;
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse: &response error: nil ];
 
     NSString *str = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"Response::%@",str);
+//    NSLog(@"Response::%@",str);
     if([str length]> 0)
     {
         NSDictionary *DataDict = [NSJSONSerialization JSONObjectWithData:returnData options:NSJSONReadingMutableContainers error:nil];
@@ -209,24 +215,61 @@ NSString *imgUrl;
 
     }
     
-//    Now Delete Image from Hp Cloud
     
-//    NSMutableURLRequest *delRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681?bulk-delete"]];
+//    Now Delete Image from Hp Cloud
+
+//    NSArray *arrtemp = [imgUrl componentsSeparatedByString:@"/"];
+//    
+//    NSMutableURLRequest *delRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681/FaceVarify?bulk-delete"]]];
 //    [request setValue:appdel.hpToken forHTTPHeaderField:@"X-Auth-Token"];
 //
 //    [request setHTTPMethod:@"DELETE"];
 //    [request setValue:@"text/plain" forHTTPHeaderField:@"Content-Type"];
-//    NSString *body = [NSString stringWithFormat:@"FaceVarify/Image82850.jpg"];
-//    NSData *databody = [body dataUsingEncoding:NSUTF8StringEncoding];
-//    
+//    NSString *body = [NSString stringWithFormat:@"FaceVarify/ImageFace/%@",[arrtemp lastObject]];
+//    NSLog(@"%@",body);
+////    body = [[NSString alloc]initWithUTF8String:body];
+//    NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
+//                                                                                  NULL,
+//                                                                                  (CFStringRef)body,
+//                                                                                  NULL,
+//                                                                                  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+//                                                                                  kCFStringEncodingUTF8 ));
+//    NSData *databody = [encodedString dataUsingEncoding:NSUTF8StringEncoding];
+//
 //    [request setHTTPBody:databody];
 //    
 //    NSData *returnDataDel = [NSURLConnection sendSynchronousRequest:delRequest returningResponse:nil error:nil];
 //    NSString *returnStrDel = [[NSString alloc] initWithData:returnDataDel encoding:NSUTF8StringEncoding];
 //    NSLog(@"bulk-delete:returnStr:%@",returnStrDel);
-
+//    
+////    returnStrDel = [returnStrDel stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//    returnStrDel = [returnStrDel stringByReplacingOccurrencesOfString:@"\n" withString:@"%0A"];
+//    returnStrDel = [returnStrDel stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
+//    NSData *databodyTemp = [returnStrDel dataUsingEncoding:NSUTF8StringEncoding];
+//    [request setHTTPBody:databodyTemp];
+//    NSData *returnDataDelTemp = [NSURLConnection sendSynchronousRequest:delRequest returningResponse:nil error:nil];
+//    NSString *returnStrDelTemp = [[NSString alloc] initWithData:returnDataDelTemp encoding:NSUTF8StringEncoding];
+//    NSLog(@"bulk-delete:returnStrTemp:%@",returnStrDelTemp);
     
+    [self performSelectorOnMainThread:@selector(removeWaitView) withObject:Nil waitUntilDone:NO];
+
 }
+
+
+- (void)addWaitView
+{
+    controller = [self.storyboard instantiateViewControllerWithIdentifier:@"waitView"];
+    [self.view addSubview:controller.view];
+    [self.view bringSubviewToFront:controller.view];
+}
+
+
+- (void)removeWaitView
+{
+    [controller.view removeFromSuperview];
+}
+
+
 
 -(void) drawFaces:(NSArray *)arrFace
 {
@@ -373,121 +416,6 @@ NSString *imgUrl;
     
 }
 
-/*
-- (void)HpFaceDetection
-{
-    
-    NSData *imageData = UIImageJPEGRepresentation(imageUser.image, 90);
-    
-    NSMutableData *body = [NSMutableData data];
-    
-    NSString *strContainer = @"https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681/FaceVarify";
-    
-    NSString *strUrl = [NSString stringWithFormat:@"http://map-api.hpl.hp.com/facedetect?url_object_store=%@/%@",strContainer,appdel.hpToken];
-
-//        NSString *strUrl = [NSString stringWithFormat:@"http://map-api.hpl.hp.com/facedetect"];
-    
-//    NSString *strUrl = [NSString stringWithFormat:@"http://map-api.hpl.hp.com/facedetect?X-Auth-Token=%@",appdel.hpToken];
-    
-    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
-    [request setValue:appdel.hpToken forHTTPHeaderField:@"X-Auth-Token"];
-//    [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
-    [request addValue:strContainer forHTTPHeaderField:@"url_object_store"];
-    
-    [request setHTTPMethod: @"POST"];
-    NSString *boundary = @"---------------------------14737809831466499882746641449";
-    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-//    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data"];
-    [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
-    
-    // file
-//     NSString *boundary = @"---------------------------14737809831466499882746641449";
-    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[@"Content-Disposition: attachment; name=\"pic\"; filename=\"1.jpg\"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[NSData dataWithData:imageData]];
-    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // text parameter
-    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"url_object_store\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[strContainer dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // another text parameter
-    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"X-Auth-Token\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[appdel.hpToken dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // close form
-    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // set request body
-    [request setHTTPBody:body];
-//    [request setValue:[NSString stringWithFormat:@"%d",[body length]] forHTTPHeaderField:@"Content-Length"];
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-	NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"returnString:%@",returnString);
-}
-*/
-
-/*
-- (void)HpFaceDetection
-{
-    NSData *imageData;
-    if(!imageUser.image)
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please Upload Photo" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:Nil, nil];
-        [alert show];
-    }
-    else
-    {
-        imageData = UIImageJPEGRepresentation(imageUser.image, 90);
-    }
-    
-    
-    NSString *strContainer = @"https://region-a.geo-1.objects.hpcloudsvc.com/v1/10873218563681/FaceVarify";
-    
-    NSString *strUrl = [NSString stringWithFormat:@"http://map-api.hpl.hp.com/facedetect"];
-    
-    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
-//    [request setValue:appdel.hpToken forHTTPHeaderField:@"X-Auth-Token"];
-
-    
-    [request setHTTPMethod: @"POST"];
-    
-    NSString *boundary = @"---------------------------14737809831466499882746641449";
-	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
-	[request addValue:contentType forHTTPHeaderField: @"Content-Type"];
-
-//    Now Lets Create the body of the POST
-    NSMutableData *body = [NSMutableData data];
-	[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-	
-//	[body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"photoName\"; filename=\"%@.png\"\r\n",@"1"] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-
-    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; type=\"text\"; id=\"url_object_store\"\r\n; name=\"%@\" type=\"file\" id=\"pic\" name=\"pic.png\"",strContainer] dataUsingEncoding:NSUTF8StringEncoding]];
-
-//    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"file\"; pic=\"%@.png\"\r\n",@"1"] dataUsingEncoding:NSUTF8StringEncoding]];
-
-    
-	[body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-	[body appendData:[NSData dataWithData:imageData]];
-	[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-//    [body appendData:[[NSString stringWithFormat:@"X-Auth-Token=%@",appdel.hpToken] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-	[request setHTTPBody:body];
-    
-    
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-	NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"returnString:%@",returnString);
-    
-}
-*/
 
 - (void)HpAuthentication
 {

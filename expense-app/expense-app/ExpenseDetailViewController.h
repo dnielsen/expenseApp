@@ -11,7 +11,9 @@
 #import "ExpenseModel.h"
 #import "utility.h"
 
-@interface ExpenseDetailViewController : UIViewController < UIImagePickerControllerDelegate, UIPopoverControllerDelegate, UIAlertViewDelegate,UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate >
+
+
+@interface ExpenseDetailViewController : UIViewController < UIImagePickerControllerDelegate, UIPopoverControllerDelegate, UIAlertViewDelegate,UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     AppDelegate *appdel;
     NSString *Flag;
@@ -20,6 +22,16 @@
     NSArray *arrPicker;
     NSString *strExpKey;
     UIViewController *controller;
+    NSString *groupImgStr;
+    IBOutlet UITableView *tbl;
+    IBOutlet UITableView *tblAttendeeList;
+    NSMutableArray *arrVerifyFacesRect;
+    NSMutableArray *arrVerifyFacesNames;
+    NSMutableArray *arrFinal;
+    NSArray *arrTable;
+    BOOL TouchFlg;
+    IBOutlet UIView *loadView;
+    NSMutableArray *arrAttendeeList;
 }
 
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
@@ -33,6 +45,6 @@
 - (void)authenticateUser:(NSString *)uname1 : (NSString *)pass1;
 - (void)addWaitView;
 - (void)removeWaitView;
-
+- (void)faceTouched:(id)sender;
 
 @end

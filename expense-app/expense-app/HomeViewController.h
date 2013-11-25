@@ -14,6 +14,7 @@
     AppDelegate *appdel;
     IBOutlet UIImageView *imageUser;
     UIImage *resizeImg;
+    UIViewController *controller;
 }
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 @property BOOL usedCamera;

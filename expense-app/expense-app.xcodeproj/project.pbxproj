@@ -42,6 +42,8 @@
 		CE5EC8DD1816897A008FF3AB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5EC8DB1816897A008FF3AB /* libxml2.dylib */; };
 		CE5EC8E018168D2A008FF3AB /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5EC8DF18168D2A008FF3AB /* Base64.m */; };
 		CE5EC8E3181690E9008FF3AB /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5EC8E2181690E9008FF3AB /* RXMLElement.m */; };
+		CE641E20182D06C6001FDCBB /* UrlEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = CE641E1F182D06C6001FDCBB /* UrlEncode.m */; };
+		CEEF04BF1832323D00701A8C /* Users.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEEF04BE1832323D00701A8C /* Users.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,9 @@
 		CE5EC8DF18168D2A008FF3AB /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		CE5EC8E1181690E9008FF3AB /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
 		CE5EC8E2181690E9008FF3AB /* RXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RXMLElement.m; sourceTree = "<group>"; };
+		CE641E1E182D06C6001FDCBB /* UrlEncode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrlEncode.h; sourceTree = "<group>"; };
+		CE641E1F182D06C6001FDCBB /* UrlEncode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrlEncode.m; sourceTree = "<group>"; };
+		CEEF04BE1832323D00701A8C /* Users.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Users.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +187,8 @@
 				AEC5B8F817F6B59B00A2A565 /* AppDelegate.m */,
 				CE5EC8DE18168D2A008FF3AB /* Base64.h */,
 				CE5EC8DF18168D2A008FF3AB /* Base64.m */,
+				CE641E1E182D06C6001FDCBB /* UrlEncode.h */,
+				CE641E1F182D06C6001FDCBB /* UrlEncode.m */,
 				AEC5B92017F6B5F600A2A565 /* ExpenseListViewController.h */,
 				AEC5B92117F6B5F600A2A565 /* ExpenseListViewController.m */,
 				AEC5B92617F6B60B00A2A565 /* ExpenseDetailViewController.h */,
@@ -213,6 +220,7 @@
 		AEC5B8EF17F6B59B00A2A565 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CEEF04BE1832323D00701A8C /* Users.plist */,
 				AEC5B8F017F6B59B00A2A565 /* expense-app-Info.plist */,
 				AEC5B8F117F6B59B00A2A565 /* InfoPlist.strings */,
 				AEC5B8F417F6B59B00A2A565 /* main.m */,
@@ -352,6 +360,7 @@
 				AE578D9E17F6F69E0036CF07 /* neg_expense_icon.png in Resources */,
 				AE578D9F17F6F69E0036CF07 /* neg_expense_icon@2x.png in Resources */,
 				AE578D9D17F6F69E0036CF07 /* neg_attendee_icon@2x.png in Resources */,
+				CEEF04BF1832323D00701A8C /* Users.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +384,7 @@
 				AEC5B8F517F6B59B00A2A565 /* main.m in Sources */,
 				AEC5B92217F6B5F600A2A565 /* ExpenseListViewController.m in Sources */,
 				CE5EC8E3181690E9008FF3AB /* RXMLElement.m in Sources */,
+				CE641E20182D06C6001FDCBB /* UrlEncode.m in Sources */,
 				CE5EC8E018168D2A008FF3AB /* Base64.m in Sources */,
 				AEEA5EC717FA3CFE0024A46D /* ModelUser.m in Sources */,
 				AEEA5E8F17FA3AC40024A46D /* ExpenseModel.m in Sources */,

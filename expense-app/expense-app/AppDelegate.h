@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSString *HPusername;
 @property (strong, nonatomic) NSString *HPpassword;
 @property (nonatomic) CGContextRef ctx;
+@property (strong, nonatomic) NSMutableArray *arrUserImages;
 
 //- (void)authenticateUser:(NSString *)uname1 : (NSString *)pass1;
 

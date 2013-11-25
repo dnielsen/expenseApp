@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "expense-app/HomeViewController.m"
-            timestampString = "405519138.554482"
+            filePath = "expense-app/ExpenseDetailViewController.m"
+            timestampString = "407064406.36686"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
-            landmarkName = "-HpFaceDetection1"
+            startingLineNumber = "417"
+            endingLineNumber = "417"
+            landmarkName = "-HpFaceVerification1"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

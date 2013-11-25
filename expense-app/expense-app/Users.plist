@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>userName</key>
+		<string>Madhuri Dixit</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Madhuri_Dixit.jpg</string>
+		<key>faceId</key>
+		<string>1250013</string>
+		<key>picId</key>
+		<string>21460c95c38a6e2cee0211d53afccf644f1447c4</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Tom Felton</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Tom_Felton.jpg</string>
+		<key>faceId</key>
+		<string>1250014</string>
+		<key>picId</key>
+		<string>7ead9bd688a81367bcdd99a08ed1fcad0927a90a</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Shahrukh Khan</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/SRK.jpg</string>
+		<key>faceId</key>
+		<string>1250015</string>
+		<key>picId</key>
+		<string>c00cc065088e0c5978b79469f8b41de07b43ed99</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Katrina Kaif</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Katrina_Kaif.jpg</string>
+		<key>faceId</key>
+		<string>1250016</string>
+		<key>picId</key>
+		<string>de05bc821038565b932634ad2e8961f543038260</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Daniel Radcliffe</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Daniel_Radcliffe.jpg</string>
+		<key>faceId</key>
+		<string>1250017</string>
+		<key>picId</key>
+		<string>53eb6a1f4cadf1a9d4d30fee0e05e38193aa379a</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Emma Watson</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Emma_Watson.jpg</string>
+		<key>faceId</key>
+		<string>1250018</string>
+		<key>picId</key>
+		<string>715ecaa0a102afb6b6881ae51fcad5965a076908</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Kristen Stewart</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Kristen_Stewert.jpg</string>
+		<key>faceId</key>
+		<string>1000015</string>
+		<key>picId</key>
+		<string>efdad5570e8cdf5747c1b240f9ae1607e12d36c2</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Rupert Grint</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Rupert_Grint.jpg</string>
+		<key>faceId</key>
+		<string>1250020</string>
+		<key>picId</key>
+		<string>62206b2cd92a1f90c06b0346e0230d6c00ca9ea1</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Will Smith</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Will_Smith.jpg</string>
+		<key>faceId</key>
+		<string>1250021</string>
+		<key>picId</key>
+		<string>0ace828d6e73bad7e25ba7c348acb9bc170b8762</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Robert Pattinson</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Robert_Pattinson.jpg</string>
+		<key>faceId</key>
+		<string>1250022</string>
+		<key>picId</key>
+		<string>353c4e1034b502cecfb92684667f9addc926bba4</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Anushka Sharma</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Anushka_Sharma.jpg</string>
+		<key>faceId</key>
+		<string>1000016</string>
+		<key>picId</key>
+		<string>cd9daf9aba79f99b4d7f9a0a2647f3b52df82542</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Taylor Lautner</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Taylor_Lautner.jpg</string>
+		<key>faceId</key>
+		<string>1250023</string>
+		<key>picId</key>
+		<string>8afa365d66084bf92cc17feb0294e0a8de12c6b2</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Saif Ali Khan</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Saif_Ali_Khan.jpg</string>
+		<key>faceId</key>
+		<string>1000017</string>
+		<key>picId</key>
+		<string>c4a9a2bfca2668b50d795ff295341c52f38cf0af</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Kareena Kapoor</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Karina_Kapoor.jpg</string>
+		<key>faceId</key>
+		<string>1000018</string>
+		<key>picId</key>
+		<string>7b7d505bbff9cebb303092c5b635ba2016ae9c0a</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Kajol</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Kajol.jpg</string>
+		<key>faceId</key>
+		<string>1000019</string>
+		<key>picId</key>
+		<string>6c532015f723f258b0f4030058b618f19298d22d</string>
+	</dict>
+	<dict>
+		<key>userName</key>
+		<string>Hrithik Roshan</string>
+		<key>userImage</key>
+		<string>https://region-a.geo-1.objects.hpcloudsvc.com:443/v1/10873218563681/FaceVarify/ProfilePics/Hrithik_Roshan.jpg</string>
+		<key>faceId</key>
+		<string>1000020</string>
+		<key>picId</key>
+		<string>38ce5101aac8c84e10a26364a4f556dfb9f109d4</string>
+	</dict>
+</array>
+</plist>

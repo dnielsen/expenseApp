@@ -15,6 +15,7 @@
     NSString *strFlag;
     int a;
     UIViewController *controller;
+    UIView *loadView;
     ExpenseModel *detailModel;
     
 }

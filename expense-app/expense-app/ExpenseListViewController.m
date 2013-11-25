@@ -39,9 +39,8 @@
 
 - (IBAction)actionRefereshExpenseList:(id)sender
 {
-    [self.tableData removeAllObjects];
     [self addWaitView];
-    [self performSelector:@selector(getModels) withObject:nil afterDelay:0.0];
+    [self performSelector:@selector(getModels) withObject:nil afterDelay:0.2];
 }
 
 - (NSArray *) tableData
@@ -99,29 +98,41 @@
 
 - (void)addWaitView
 {
-    controller = [self.storyboard instantiateViewControllerWithIdentifier:@"waitView"];
-    [self.view addSubview:controller.view];
+////    controller = [self.storyboard instantiateViewControllerWithIdentifier:@"waitView"];
+//    controller = [[UIViewController alloc] init];
+//    [controller.view setFrame:self.view.bounds];
+//    [controller.view setBackgroundColor:[UIColor blackColor]];
+//    [controller.view setAlpha:0.66666667];
+//    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc]
+//                                                  initWithFrame:CGRectMake(0.0f, 0.0f, 120.0f, 120.0f)];
+//    [activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//    [activityIndicator startAnimating];
+//    [controller.view addSubview:activityIndicator];
+//    
+//    UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake(70.0, 200.0, 100.0, 40.0)];
+//    [lbl setText:@"Please wait"];
+//    [controller.view addSubview:lbl];
+//    
+//    
+//    [self.view addSubview:controller.view];
+//    [self.view bringSubviewToFront:controller.view];
+    [loadView setHidden:FALSE];
+    [self.view bringSubviewToFront:loadView];
 }
 
 - (void)removeWaitView
 {
-    [controller.view removeFromSuperview];
+//    [controller.view removeFromSuperview];
+    [loadView setHidden:TRUE];
     
-    //Close the screen
-//    if([self.presentingViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)])
-//        [self.presentingViewController dismissViewControllerAnimated:(YES) completion:nil];
-//    else if([self.presentingViewController respondsToSelector:@selector(dismissModalViewControllerAnimated:)])
-//        [self.presentingViewController dismissModalViewControllerAnimated:YES];
-//    else
-//        NSLog(@"Oooops, what system is this ?!!! - should never see this !");
-//    
-
 }
 
 #pragma mark - Get concur User Reports
 
 - ( void ) getModels
 {
+    [self.tableData removeAllObjects];
+
 
 //    NSString *url = [NSString stringWithFormat:@"https://www.concursolutions.com/api/expense/expensereport/v1.1/Report"];
     
@@ -382,6 +393,7 @@
         ExpenseModel *rowObject = [[self tableData] objectAtIndex:row];
 
 //        [self addWaitView];
+//        [self performSelector:<#(SEL)#> withObject:<#(id)#> afterDelay:<#(NSTimeInterval)#> inModes:<#(NSArray *)#>];
         [self getReportDetails:rowObject.ReportId];//        Get ReportDetails
         ExpenseDetailViewController *detailController = segue.destinationViewController;
         detailController.Flag = @"EDIT";
@@ -432,6 +444,33 @@
     [super viewDidLoad];
     appdel = [UIApplication sharedApplication].delegate;
     a = 0;
+    
+    
+    //    controller = [self.storyboard instantiateViewControllerWithIdentifier:@"waitView"];
+    loadView = [[UIView alloc] init];
+    [loadView setFrame:self.view.bounds];
+    [loadView setBackgroundColor:[UIColor blackColor]];
+    [loadView setAlpha:0.66666667];
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc]
+                                                   init];
+    [activityIndicator setCenter:CGPointMake(150.0f, 274.0f)];
+                                                  
+    [activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [activityIndicator startAnimating];
+    [loadView addSubview:activityIndicator];
+    
+    UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake(115.0, 344.0, 108.0, 21.0)];
+    [lbl setText:@"Please wait"];
+    [lbl setTextColor:[UIColor whiteColor]];
+    [loadView addSubview:lbl];
+    
+    
+    [self.view addSubview:loadView];
+    [self.view bringSubviewToFront:loadView];
+    [loadView setHidden:TRUE];
+
+    
+    
     if(!appdel.ConcurToken)
     {
         //    Code for asking user details
